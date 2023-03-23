@@ -40,8 +40,15 @@ To be done!
 
 ## How to install?
 
-Installation instruction.
-To be done!!
+To build project in Unity:
+1. Download repository
+2. Unzip it
+3. Open UnityHub
+4. In UnityHub click 'Open project from disk'
+5. Choose 'Optimal_Route_Project' folder localization
+
+To install program independently:
+1. TO BE DONE
 
 ## Technologies
 
