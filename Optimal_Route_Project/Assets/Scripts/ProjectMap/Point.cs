@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+public enum PointType
+{
+    Point,
+    Warehouse
+}
+
 [ExecuteInEditMode]
 public class Point : MonoBehaviour
 {
@@ -10,11 +16,15 @@ public class Point : MonoBehaviour
 
     [Header("Point parameters")]
     [SerializeField]
+    private PointType pointType;
+    public PointType PointType { get { return pointType; } private set { pointType = value; } }
+
+    [SerializeField]
     private int maxNumberOfConnections;
     [SerializeField]
     private Vector2 currentPointPosition = Vector2.zero;
-    
-    
+
+
 
     [Header("Connected Points info")]
     [SerializeField]
@@ -28,7 +38,7 @@ public class Point : MonoBehaviour
     {
         MapController = GameObject.FindGameObjectWithTag("MapController").GetComponent<Map>();
     }
-    
+
     private void Update()
     {
         FindClosestPoint();
@@ -45,7 +55,7 @@ public class Point : MonoBehaviour
 
         currentPointPosition = transform.position;
         Vector2 nextPointPosition = Vector2.zero;
-        
+
 
 
         foreach (GameObject point in MapController.points)
@@ -53,7 +63,7 @@ public class Point : MonoBehaviour
 
             nextPointPosition = point.transform.position;
 
-             float dist = Vector2.Distance(currentPointPosition, nextPointPosition);
+            float dist = Vector2.Distance(currentPointPosition, nextPointPosition);
 
             if (dist < minDist && dist != 0f)
             {
@@ -63,7 +73,7 @@ public class Point : MonoBehaviour
 
 
             }
-        } 
+        }
 
 
     }
