@@ -37,12 +37,5 @@ namespace Assets.Scripts
             Array values = Enum.GetValues(typeof(GoodsType));
             GoodsType randomGoodsType = (GoodsType)values.GetValue(rng.Next(values.Length));
         }
-
-
-
-
     }
-
-
-
 }
