@@ -14,7 +14,6 @@ namespace Assets.Scripts
     [ExecuteInEditMode]
     public class Goods
     {
-        static readonly Random rng = new Random();
 
         [SerializeField]
         private int goodsType;
@@ -25,7 +24,7 @@ namespace Assets.Scripts
         }
 
         [SerializeField]
-        private int weight = rng.Next(100,200);
+        private int weight = UnityEngine.Random.Range(100, 200);
         private int Weight
         {
             get { return weight; }
@@ -35,7 +34,7 @@ namespace Assets.Scripts
         private void RandomType()
         {
             Array values = Enum.GetValues(typeof(GoodsType));
-            GoodsType randomGoodsType = (GoodsType)values.GetValue(rng.Next(values.Length));
+            GoodsType randomGoodsType = (GoodsType)values.GetValue(UnityEngine.Random.Range(0, values.Length));
         }
     }
 }
