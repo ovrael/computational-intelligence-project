@@ -18,39 +18,65 @@ namespace Assets.Scripts
         private VehicleType vehicleType;
         public VehicleType VehicleType { get { return vehicleType; } private set { vehicleType = value; } }
 
-        private int maxCapacity;
-        private int currentCapacity;
 
-        private SpriteRenderer spriteRenderer;
+        [SerializeField]
+        private int maxCapacity;
+
+        private GoodsData goodsData;
+        public GoodsData GoodsData { get => goodsData; set => goodsData = value; }
+
 
         private void Awake()
         {
-            currentCapacity = 0;
-
-            Array values = Enum.GetValues(typeof(VehicleType));
-            VehicleType = (VehicleType)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+            Array vehicleTypes = Enum.GetValues(typeof(VehicleType));
+            VehicleType = (VehicleType)vehicleTypes.GetValue(UnityEngine.Random.Range(0, vehicleTypes.Length));
             maxCapacity = (int)VehicleType;
+            SetVehicleColor();
+        }
 
-            spriteRenderer = GetComponent<SpriteRenderer>();
-
+        private void SetVehicleColor()
+        {
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             switch (vehicleType)
             {
                 case VehicleType.Small:
-                    spriteRenderer.color = Utils.CreateColor(30, 140, 60);
-                    Debug.Log("Change color to green");
+                    spriteRenderer.color = Config.GetInstance().GreenVehicleColor;
                     break;
                 case VehicleType.Medium:
-                    spriteRenderer.color = Utils.CreateColor(30, 70, 160);
-                    Debug.Log("Change color to blue");
+                    spriteRenderer.color = Config.GetInstance().BlueVehicleColor;
                     break;
                 case VehicleType.Large:
-                    spriteRenderer.color = Utils.CreateColor(150, 30, 30);
-                    Debug.Log("Change color to red");
+                    spriteRenderer.color = Config.GetInstance().RedVehicleColor;
                     break;
 
                 default:
                     Debug.Log("Can't find vehicle of type: " + vehicleType);
                     break;
+            }
+        }
+
+        public void LoadAllFromOther(GoodsData otherGoodsData, bool takeHowMuchYouCan = true)
+        {
+            // I want to take all goods
+            if (!takeHowMuchYouCan)
+            {
+                // Whoops, too much for me!
+                if (GoodsData.GetAllWeight() + otherGoodsData.GetAllWeight() > maxCapacity)
+                {
+                    Debug.LogWarning($"Vehicle cannot take other goods, it's more thant its max capacity." +
+                        $"current capacity:{GoodsData.GetAllWeight()}, " +
+                        $"other weights:{otherGoodsData.GetAllWeight()}, " +
+                        $"max capacity:{maxCapacity}");
+                    return;
+                }
+
+                GoodsData.LoadFromOther(otherGoodsData);
+            }
+
+            // I want to take as much as I have capacity
+            if (takeHowMuchYouCan)
+            {
+
             }
         }
     }
