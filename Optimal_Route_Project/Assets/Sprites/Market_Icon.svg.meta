@@ -11,22 +11,22 @@ ScriptedImporter:
   svgType: 0
   texturedSpriteMeshType: 0
   svgPixelsPerUnit: 100
-  gradientResolution: 64
+  gradientResolution: 100
   alignment: 0
   customPivot: {x: 0, y: 0}
   generatePhysicsShape: 0
   viewportOptions: 0
   preserveViewport: 0
-  advancedMode: 1
-  predefinedResolutionIndex: 1
-  targetResolution: 1080
-  resolutionMultiplier: 1
-  stepDistance: 10
-  samplingStepDistance: 100
-  maxCordDeviationEnabled: 0
-  maxCordDeviation: 1
-  maxTangentAngleEnabled: 0
-  maxTangentAngle: 5
+  advancedMode: 0
+  predefinedResolutionIndex: 0
+  targetResolution: 2160
+  resolutionMultiplier: 100
+  stepDistance: 2
+  samplingStepDistance: 564.6
+  maxCordDeviationEnabled: 1
+  maxCordDeviation: 92.2
+  maxTangentAngleEnabled: 1
+  maxTangentAngle: 82.3
   keepTextureAspectRatio: 1
   textureSize: 256
   textureWidth: 256

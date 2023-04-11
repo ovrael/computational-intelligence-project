@@ -5,7 +5,7 @@ using UnityEditor;
 
 public enum PointType
 {
-    Point,
+    Market,
     Warehouse
 }
 

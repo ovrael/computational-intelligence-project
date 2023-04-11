@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -7734987554305437169}
   - component: {fileID: -8928798585936623894}
   m_Layer: 0
-  m_Name: TestPoint
+  m_Name: MarketPoint
   m_TagString: MapPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

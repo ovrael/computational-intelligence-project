@@ -22,7 +22,7 @@ public class Map : MonoBehaviour
 
     [Header("Map objects")]
     [SerializeField]
-    private GameObject point;
+    private GameObject marketPoint;
     [SerializeField]
     private GameObject warehousePoint;
     [SerializeField]
@@ -34,6 +34,9 @@ public class Map : MonoBehaviour
 
 
     private Dictionary<string, string> pointsConnections = new Dictionary<string, string>();
+
+    private const string prefixMarket = "Market_";
+    private const string prefixWarehouse = "Warehouse_";
 
 
     [ContextMenu("Spawn whole map")]
@@ -58,13 +61,15 @@ public class Map : MonoBehaviour
             if (points.Count < numberOfWarehouses)
             {
                 points.Add(Instantiate(warehousePoint, randomPosition, Quaternion.identity));
+                points[counterNames].name = prefixWarehouse + counterNames.ToString();
             }
             else
             {
-                points.Add(Instantiate(point, randomPosition, Quaternion.identity));
+                points.Add(Instantiate(marketPoint, randomPosition, Quaternion.identity));
+                points[counterNames].name = prefixMarket + counterNames.ToString();
             }
 
-            points[counterNames].name = counterNames.ToString();
+            
 
             Debug.Log("Point " + counterNames + " coordinates: " + points[counterNames].transform.position);
 
