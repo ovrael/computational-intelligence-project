@@ -6,6 +6,9 @@ TagManager:
   tags:
   - MapPoint
   - MapController
+  - MarketPoint
+  - WarehousePoint
+  - Vehicle
   layers:
   - Default
   - TransparentFX

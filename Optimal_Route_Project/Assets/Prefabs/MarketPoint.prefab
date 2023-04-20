@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -8928798585936623894}
   m_Layer: 0
   m_Name: MarketPoint
-  m_TagString: MapPoint
+  m_TagString: MarketPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,9 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointType: 0
-  maxNumberOfConnections: 0
+  maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
-  closestPointPosition: {x: 0, y: 0}
   MapController: {fileID: 0}
 --- !u!212 &-8928798585936623894
 SpriteRenderer:

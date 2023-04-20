@@ -170,6 +170,13 @@ public class Map : MonoBehaviour
     [ContextMenu("Create vehicles")]
     private void CreateVehicles()
     {
+
+        if (vehicles != null)
+        {
+            ClearVehicles();
+        }
+
+
         if (numberOfVehicles <= 0 || vehiclePrefab == null)
             return;
 
@@ -184,6 +191,18 @@ public class Map : MonoBehaviour
             createdVehicle.name = $"Vehicle_{i} ({createdVehicle.GetComponent<Vehicle>().VehicleType})";
             vehicles.Add(createdVehicle);
         }
+    }
+
+    [ContextMenu("Clear vehicles")]
+    private void ClearVehicles()
+    {
+
+        foreach (GameObject vehicleObject in vehicles)
+        {
+            DestroyImmediate(vehicleObject);
+        }
+
+        vehicles.Clear();
     }
 
     void OnValidate()
