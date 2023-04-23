@@ -71,7 +71,11 @@ namespace Assets.Scripts
         
         private void Update()
         {
-           
+            if (allowTestRun == true && testRunFinished == false)
+            {
+                PerformTestRun();
+                CalculateTraveledDistance();
+            }
 
         }
 
@@ -146,7 +150,6 @@ namespace Assets.Scripts
 
         }
 
-       
 
         private void VisualizePath()
         {
@@ -162,6 +165,50 @@ namespace Assets.Scripts
             pathLine.positionCount = pointsPositions.Length;
             pathLine.SetPositions(pointsPositions);
 
+        }
+
+        [ContextMenu("Reset vehicle")]
+        private void ResetVehicle()
+        {
+            transform.position = startPosition;
+            allowTestRun = false;
+            testRunFinished = false;
+
+            currentPosition = transform.position;
+            totalDistanceTraveled = 0;
+
+            pointsToVisit.Clear();
+            pathLine.positionCount = 0;
+        }
+
+        private void PerformTestRun()
+        {
+
+            transform.position = Vector2.MoveTowards(transform.position, pointsToVisit[nextPointIndex].transform.position, vehicleSpeed * Time.deltaTime);
+
+            if (Vector2.Distance(transform.position, pointsToVisit[nextPointIndex].transform.position) < 0.1f)
+            {
+
+                if (nextPointIndex < pointsToVisit.Count - 1)
+                {
+                    nextPointIndex = nextPointIndex + 1;
+                }
+                else
+                {
+                    nextPointIndex = 0;
+                    testRunFinished = true;
+                }
+
+            }
+
+        }
+
+        private void CalculateTraveledDistance()
+        {
+            float distanceThisFrame = Vector3.Distance(transform.position, currentPosition);
+            totalDistanceTraveled += distanceThisFrame;
+
+            currentPosition = transform.position;
         }
 
     }
