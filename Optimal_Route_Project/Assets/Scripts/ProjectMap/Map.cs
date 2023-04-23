@@ -186,7 +186,7 @@ public class Map : MonoBehaviour
 
         for (int i = 0; i < numberOfVehicles; i++)
         {
-            Vector3 randomWarehouse = warehousesLocalizations[randomWarehouseIndex] + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), -10);
+            Vector3 randomWarehouse = warehousesLocalizations[randomWarehouseIndex] + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), -5);
             GameObject createdVehicle = Instantiate(vehiclePrefab, randomWarehouse, Quaternion.identity);
             createdVehicle.name = $"Vehicle_{i} ({createdVehicle.GetComponent<Vehicle>().VehicleType})";
             vehicles.Add(createdVehicle);

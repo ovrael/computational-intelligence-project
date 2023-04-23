@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -14,16 +15,43 @@ namespace Assets.Scripts
     [ExecuteInEditMode]
     public class Vehicle : MonoBehaviour
     {
+
+        [Header("Vehicle parameters")]
         [SerializeField]
         private VehicleType vehicleType;
         public VehicleType VehicleType { get { return vehicleType; } private set { vehicleType = value; } }
-
-
         [SerializeField]
         private int maxCapacity;
+        [SerializeField]
+        private float vehicleSpeed = 10.0f;
 
         private GoodsData goodsData;
         public GoodsData GoodsData { get => goodsData; set => goodsData = value; }
+
+        [Header("Travel info")]
+        [SerializeField]
+        private int howManyVisits = 4;
+        [SerializeField]
+        private List<GameObject> pointsToVisit = new List<GameObject>();
+        [SerializeField]
+        private Vector2 startPosition;
+        [SerializeField]
+        private Vector2 currentPosition;
+        [SerializeField]
+        private float totalDistanceTraveled = 0f;
+
+        [Header("Test run")]
+        [SerializeField]
+        private bool allowTestRun = false;
+        [SerializeField]
+        private bool testRunFinished = false;
+
+        [Header("Map Controller Reference")]
+        [SerializeField]
+        private Map MapController;
+
+        private int nextPointIndex;
+        private LineRenderer pathLine;
 
 
         private void Awake()
@@ -31,7 +59,20 @@ namespace Assets.Scripts
             Array vehicleTypes = Enum.GetValues(typeof(VehicleType));
             VehicleType = (VehicleType)vehicleTypes.GetValue(UnityEngine.Random.Range(0, vehicleTypes.Length));
             maxCapacity = (int)VehicleType;
+
+            pathLine = GetComponent<LineRenderer>();
+            MapController = GameObject.FindGameObjectWithTag("MapController").GetComponent<Map>();
+
+            startPosition = transform.position;
+            currentPosition = transform.position;
+
             SetVehicleColor();
+        }
+        
+        private void Update()
+        {
+           
+
         }
 
         private void SetVehicleColor()
@@ -79,5 +120,49 @@ namespace Assets.Scripts
 
             }
         }
+
+        [ContextMenu("Add random points to list")]
+        private void PickRandomPoints()
+        {
+
+            if (pointsToVisit != null)
+            {
+                pointsToVisit.Clear();
+            }
+
+            pointsToVisit.Add(this.gameObject);
+
+            for (int i = 0; i < howManyVisits; i++)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, MapController.points.Count);
+
+                if (!pointsToVisit.Contains(MapController.points[randomIndex]))
+                {
+                    pointsToVisit.Add(MapController.points[randomIndex]);
+                }
+            }
+
+            VisualizePath();
+
+        }
+
+       
+
+        private void VisualizePath()
+        {
+            Vector3[] pointsPositions = new Vector3[pointsToVisit.Count];
+
+            pointsPositions[0] = transform.position;
+
+            for (int i = 1; i < pointsPositions.Length; i++)
+            {
+                pointsPositions[i] = pointsToVisit[i].transform.position;
+            }
+
+            pathLine.positionCount = pointsPositions.Length;
+            pathLine.SetPositions(pointsPositions);
+
+        }
+
     }
 }
