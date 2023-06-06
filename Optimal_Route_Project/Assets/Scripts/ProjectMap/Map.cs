@@ -6,6 +6,7 @@ using System.Linq;
 using static UnityEngine.Rendering.DebugUI;
 using Assets.Scripts;
 
+
 [ExecuteInEditMode]
 public class Map : MonoBehaviour
 {
@@ -13,12 +14,16 @@ public class Map : MonoBehaviour
     [SerializeField]
     private int randomSeed = 69420;
 
+    [Space(10f)]
+
     [SerializeField]
     private int numberOfPoints;
     [SerializeField]
     private int numberOfWarehouses;
     [SerializeField]
     private int numberOfVehicles;
+
+    [Space(10f)]
 
     [Header("Map objects")]
     [SerializeField]
@@ -28,9 +33,12 @@ public class Map : MonoBehaviour
     [SerializeField]
     private GameObject vehiclePrefab;
 
+    [Space(10f)]
 
     public List<GameObject> points = new List<GameObject>();
     public List<GameObject> vehicles = new List<GameObject>();
+
+    
 
 
     private Dictionary<string, string> pointsConnections = new Dictionary<string, string>();
@@ -165,8 +173,6 @@ public class Map : MonoBehaviour
 
     }
 
-
-
     [ContextMenu("Create vehicles")]
     private void CreateVehicles()
     {
@@ -210,6 +216,26 @@ public class Map : MonoBehaviour
         if (Random.seed != randomSeed)
             Random.InitState(randomSeed);
     }
+
+
+    #region  Map Buttons
+
+    [EditorToolsButtons.Button(name: "Spawn Whole Map", space: 5f)]
+    private void SpawnWholeMapButton() => CreateMap();
+    [EditorToolsButtons.Button(name: "Clear Map", space: 5f)]
+    private void ClearMapButton() => ClearMap();
+    [EditorToolsButtons.Button(name: "Add Points to Dictionary", space: 5f)]
+    private void AddPointsToDictionaryButton() => AddPointsToDictionary();
+    [EditorToolsButtons.Button(name: "Print Dictionary", space: 5f)]
+    private void PrintDictionaryButton() => PrintDictionary();
+    [EditorToolsButtons.Button(name: "Gizmo On/Off", space: 5f)]
+    private void GizmoActivationButton() => GizmoActivation();
+    [EditorToolsButtons.Button(name: "Create Vehicles", space: 5f)]
+    private void CreateVehiclesButton() => CreateVehicles();
+    [EditorToolsButtons.Button(name: "Clear vehicles", space: 5f)]
+    private void ClearVehiclesButton() => ClearVehicles();
+
+    #endregion
 }
 
 
