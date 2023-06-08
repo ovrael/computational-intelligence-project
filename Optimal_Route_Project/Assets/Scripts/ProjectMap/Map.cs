@@ -238,6 +238,26 @@ public class Map : MonoBehaviour
         {
             tripData.Vehicle.tripPoints = tripData.TripPoints.ToArray();
         }
+
+        GameObject areasParent = GameObject.Find("Areas");
+        foreach (Transform child in areasParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        int counter = 0;
+        foreach (var limitation in trip.limitations)
+        {
+            GameObject rect = new GameObject();
+            var sprite = rect.AddComponent<SpriteRenderer>();
+
+            rect.transform.position = new Vector3(limitation.x + limitation.width / 2 + counter * limitation.width, limitation.y + limitation.height / 2 + counter * limitation.height, 0);
+            rect.transform.localScale = new Vector3(limitation.width, limitation.height, 1);
+            sprite.color = Random.ColorHSV(0, 1, 0.2f, 0.3f, 0.95f, 1f);
+            sprite.sprite = GameObject.Find("Background_Sprite").GetComponent<SpriteRenderer>().sprite;
+
+            rect.transform.SetParent(areasParent.transform);
+        }
     }
 
     [ContextMenu("Find spot for cat")]

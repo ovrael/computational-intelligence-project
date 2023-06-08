@@ -44,6 +44,7 @@ namespace Assets.Scripts
         private Vehicle[] vehicles;
         private GameObject startWarehouse;
         private TripData[] tripDatas;
+        public Rect[] limitations;
 
         public Trip(List<GameObject> points, List<GameObject> vehicles, GameObject startWarehouse)
         {
@@ -153,6 +154,9 @@ namespace Assets.Scripts
                 tripData.TripPoints.Add(startWarehouse);
             }
 
+            if (tripData.TripPoints.Count > 2 && tripData.TripPoints[1].name == startWarehouse.name)
+                tripData.TripPoints.RemoveAt(0);
+
             // Found best trip
             Debug.Log("End of trip");
         }
@@ -200,7 +204,7 @@ namespace Assets.Scripts
         public void Run()
         {
             tripDatas = new TripData[vehicles.Length];
-            Rect[] limitations = ComputeLimitations(vehicles.Length);
+            limitations = ComputeLimitations(vehicles.Length);
 
             for (int i = 0; i < tripDatas.Length; i++)
             {
@@ -233,8 +237,6 @@ namespace Assets.Scripts
             int topPartsCount = vehiclesCount / 2;          // will be 2
             int botPartsCount = vehiclesCount / 2 + vehiclesCount % 2;      // will be 3
             float fieldSize = 100;
-
-
 
             float topPartWidth = fieldSize / topPartsCount; // will be 50.0
             float botPartWidth = fieldSize / botPartsCount; // will be 33.3

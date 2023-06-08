@@ -209,7 +209,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 173
+  goods: -134
   skip: 0
 --- !u!4 &9637754
 Transform:
@@ -312,7 +312,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -135
+  goods: -171
   skip: 0
 --- !u!4 &87565190
 Transform:
@@ -415,7 +415,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 189
+  goods: -107
   skip: 0
 --- !u!4 &156287338
 Transform:
@@ -518,7 +518,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 116
+  goods: -154
   skip: 0
 --- !u!4 &294988166
 Transform:
@@ -621,7 +621,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -134
+  goods: 156
   skip: 0
 --- !u!4 &335862758
 Transform:
@@ -654,7 +654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &372075219
 Transform:
   m_ObjectHideFlags: 0
@@ -808,7 +808,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 107
+  goods: -159
   skip: 0
 --- !u!4 &386588275
 Transform:
@@ -911,7 +911,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 180
+  goods: -149
   skip: 0
 --- !u!4 &409805098
 Transform:
@@ -1014,7 +1014,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 171
+  goods: 180
   skip: 0
 --- !u!4 &422335858
 Transform:
@@ -1117,7 +1117,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 156
+  goods: -135
   skip: 0
 --- !u!4 &429145456
 Transform:
@@ -1220,7 +1220,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -107
+  goods: -145
   skip: 0
 --- !u!4 &471835415
 Transform:
@@ -1494,7 +1494,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -135
+  goods: -181
   skip: 0
 --- !u!4 &548018197
 Transform:
@@ -1681,7 +1681,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 161
+  goods: 173
   skip: 0
 --- !u!4 &653599310
 Transform:
@@ -1784,7 +1784,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -154
+  goods: -135
   skip: 0
 --- !u!4 &738013237
 Transform:
@@ -1887,7 +1887,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 123
+  goods: -131
   skip: 0
 --- !u!4 &825311222
 Transform:
@@ -1990,7 +1990,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -145
+  goods: 121
   skip: 0
 --- !u!4 &874971151
 Transform:
@@ -2093,7 +2093,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 156
+  goods: 161
   skip: 0
 --- !u!4 &935483653
 Transform:
@@ -2196,7 +2196,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -171
+  goods: 171
   skip: 0
 --- !u!4 &973275164
 Transform:
@@ -2299,7 +2299,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -159
+  goods: -100
   skip: 0
 --- !u!4 &993392017
 Transform:
@@ -2402,7 +2402,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 121
+  goods: 163
   skip: 0
 --- !u!4 &1040542286
 Transform:
@@ -2505,7 +2505,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 119
+  goods: -149
   skip: 0
 --- !u!4 &1140884493
 Transform:
@@ -2538,7 +2538,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1196792991
 Transform:
   m_ObjectHideFlags: 0
@@ -2643,6 +2643,8 @@ MonoBehaviour:
   marketPoint: {fileID: 1459806078527671467, guid: d76b3b4c90af3a34e865346bf7795594, type: 3}
   warehousePoint: {fileID: 5574465716993815194, guid: 4612b2d6fe8e92342a6a0971933b22a0, type: 3}
   vehiclePrefab: {fileID: 863281940382607863, guid: 33657a2b27349b142a6af76642bdf4d3, type: 3}
+  animalShelterPoint: {fileID: 5574465716993815194, guid: cb8fc105a1e707e42aa1b2c8af225adb, type: 3}
+  CatSprite: {fileID: 21300000, guid: 68b109f8224618b4dac3ba10fbf60863, type: 3}
   points:
   - {fileID: 935483650}
   - {fileID: 1931626718}
@@ -2703,8 +2705,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0ddb2a2da6e644aa5594a30df0dbc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minVehicles: 4
-  maxVehicles: 4
+  minVehicles: 3
+  maxVehicles: 6
   redVehicleColor: {r: 0.5882353, g: 0.11764706, b: 0.11764706, a: 1}
   greenVehicleColor: {r: 0.11764706, g: 0.54901963, b: 0.23529412, a: 1}
   blueVehicleColor: {r: 0.11764706, g: 0.27450982, b: 0.627451, a: 1}
@@ -2726,7 +2728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1487770620
 Transform:
   m_ObjectHideFlags: 0
@@ -2880,7 +2882,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -149
+  goods: 116
   skip: 0
 --- !u!4 &1515448066
 Transform:
@@ -2983,7 +2985,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 163
+  goods: 123
   skip: 0
 --- !u!4 &1702960912
 Transform:
@@ -3086,7 +3088,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -149
+  goods: 107
   skip: 0
 --- !u!4 &1785302671
 Transform:
@@ -3189,7 +3191,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -100
+  goods: 123
   skip: 0
 --- !u!4 &1883464831
 Transform:
@@ -3292,7 +3294,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -135
+  goods: 189
   skip: 0
 --- !u!4 &1888091650
 Transform:
@@ -3395,7 +3397,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -181
+  goods: -135
   skip: 0
 --- !u!4 &1896250476
 Transform:
@@ -3498,7 +3500,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 111
+  goods: 119
   skip: 0
 --- !u!4 &1931626721
 Transform:
@@ -3601,7 +3603,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: 123
+  goods: -150
   skip: 0
 --- !u!4 &2048839500
 Transform:
@@ -3704,7 +3706,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -131
+  goods: 111
   skip: 0
 --- !u!4 &2091033733
 Transform:
@@ -3807,7 +3809,7 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 1388388799}
-  goods: -150
+  goods: 156
   skip: 0
 --- !u!4 &2096559585
 Transform:
@@ -3840,7 +3842,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2111169132
 Transform:
   m_ObjectHideFlags: 0
