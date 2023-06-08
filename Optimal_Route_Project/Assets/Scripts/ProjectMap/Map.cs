@@ -65,7 +65,7 @@ public class Map : MonoBehaviour
             ClearMap();
         }
 
-       
+
         int counterNames = 0;
 
 
@@ -89,7 +89,7 @@ public class Map : MonoBehaviour
                 points[counterNames].name = prefixMarket + counterNames.ToString();
             }
 
-            
+
 
             Debug.Log("Point " + counterNames + " coordinates: " + points[counterNames].transform.position);
 
@@ -196,30 +196,26 @@ public class Map : MonoBehaviour
         if (vehicles != null)
         {
             ClearVehicles();
-        if (Config.GetInstance() != null)
-            numberOfVehicles = Random.Range(Config.GetInstance().MinVehicles, Config.GetInstance().MaxVehicles + 1);
-        else
-            numberOfVehicles = Random.Range(3, 7);
+            if (Config.GetInstance() != null)
+                numberOfVehicles = Random.Range(Config.GetInstance().MinVehicles, Config.GetInstance().MaxVehicles + 1);
+            else
+                numberOfVehicles = Random.Range(3, 7);
+
+            if (numberOfVehicles <= 0 || vehiclePrefab == null)
+                return;
+
+            List<GameObject> warehouses = points.Where(p => p.GetComponent<Point>().PointType == PointType.Warehouse).ToList();
+            int randomWarehouseIndex = Random.Range(0, warehouses.Count);
 
 
-
-
-
-        if (numberOfVehicles <= 0 || vehiclePrefab == null)
-            return;
-
-        List<GameObject> warehouses = points.Where(p => p.GetComponent<Point>().PointType == PointType.Warehouse).ToList();
-        int randomWarehouseIndex = Random.Range(0, warehouses.Count);
-
-
-            Vector3 positionAroundWarehouse = startWarehouse.transform.position + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), -5);
-            GameObject createdVehicle = Instantiate(vehiclePrefab, positionAroundWarehouse, Quaternion.identity);
-            createdVehicle.name = $"Vehicle_{i}";
-            createdVehicle.GetComponent<Vehicle>().enabled = true;
-            GameObject createdVehicle = Instantiate(vehiclePrefab, randomWarehouse, Quaternion.identity);
-            createdVehicle.name = $"Vehicle_{i} ({createdVehicle.GetComponent<Vehicle>().VehicleType})";
-
-            vehicles.Add(createdVehicle);
+            for (int i = 0; i < numberOfVehicles; i++)
+            {
+                Vector3 positionAroundWarehouse = startWarehouse.transform.position + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), -5);
+                GameObject createdVehicle = Instantiate(vehiclePrefab, positionAroundWarehouse, Quaternion.identity);
+                createdVehicle.name = $"Vehicle_{i}";
+                createdVehicle.GetComponent<Vehicle>().enabled = true;
+                vehicles.Add(createdVehicle);
+            }
         }
     }
 
@@ -230,8 +226,8 @@ public class Map : MonoBehaviour
         {
             DestroyImmediate(vehicleObject);
         }
-
         vehicles.Clear();
+    }
     private void RunTripSolver()
     {
         trip = new Trip(this.points, this.vehicles, this.startWarehouse);
@@ -248,7 +244,7 @@ public class Map : MonoBehaviour
     private void FindSpotForCat()
     {
         int randomIndex = Random.Range(0, vehicles.Count);
-        GameObject randomVehicle= vehicles[randomIndex];
+        GameObject randomVehicle = vehicles[randomIndex];
 
         randomVehicle.name += prefixCatSpot;
 
@@ -257,14 +253,11 @@ public class Map : MonoBehaviour
         catSpot.sprite = CatSprite;
     }
 
-    }
-
     void OnValidate()
     {
         if (Random.seed != randomSeed)
             Random.InitState(randomSeed);
     }
-
 
     #region  Map Buttons
 
@@ -280,9 +273,9 @@ public class Map : MonoBehaviour
     private void GizmoActivationButton() => GizmoActivation();
     [EditorToolsButtons.Button(name: "Create Vehicles", space: 5f)]
     private void CreateVehiclesButton() => CreateVehicles();
-    [EditorToolsButtons.Button(name: "Clear vehicles", space: 5f)]
     [EditorToolsButtons.Button(name: "Run Vehicles", space: 5f)]
     private void RunTripSolverButton() => RunTripSolver();
+    [EditorToolsButtons.Button(name: "Clear vehicles", space: 5f)]
     private void ClearVehiclesButton() => ClearVehicles();
 
     #endregion
