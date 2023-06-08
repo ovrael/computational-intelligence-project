@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 409af7311e33e8847964b479ab574002
+guid: aa83311f54a1b444a874d5d88c460a27
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -11,7 +11,7 @@ ScriptedImporter:
   svgType: 0
   texturedSpriteMeshType: 0
   svgPixelsPerUnit: 100
-  gradientResolution: 100
+  gradientResolution: 64
   alignment: 0
   customPivot: {x: 0, y: 0}
   generatePhysicsShape: 0
@@ -50,5 +50,5 @@ ScriptedImporter:
         y: 0
         width: 0
         height: 0
-      spriteID: 4ecc3ee77c617d94bb779a6f7d129e32
+      spriteID: 6fb084a330b3d374e804cf728786d048
     PhysicsOutlines: []
