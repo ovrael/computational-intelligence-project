@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -15,24 +16,23 @@ namespace Assets.Scripts
     [ExecuteInEditMode]
     public class Vehicle : MonoBehaviour
     {
-
         [Header("Vehicle parameters")]
         [SerializeField]
         private VehicleType vehicleType;
         public VehicleType VehicleType { get { return vehicleType; } private set { vehicleType = value; } }
         [SerializeField]
-        private int maxCapacity;
+        public int maxCapacity;
         [SerializeField]
         private float vehicleSpeed = 10.0f;
 
-        private GoodsData goodsData;
-        public GoodsData GoodsData { get => goodsData; set => goodsData = value; }
+        public int loadout = 0;
+        public int LeftLoadoutSpace { get { return maxCapacity - loadout; } }
 
         [Header("Travel info")]
         [SerializeField]
         private int howManyVisits = 4;
         [SerializeField]
-        private List<GameObject> pointsToVisit = new List<GameObject>();
+        private List<GameObject> pointsToVisit;
         [SerializeField]
         private Vector2 startPosition;
         [SerializeField]
@@ -53,6 +53,9 @@ namespace Assets.Scripts
         private int nextPointIndex;
         private LineRenderer pathLine;
 
+        private Color color;
+        public GameObject[] tripPoints;
+
 
         private void Awake()
         {
@@ -68,30 +71,31 @@ namespace Assets.Scripts
 
             SetVehicleColor();
         }
-        
+
         private void Update()
         {
-            if (allowTestRun == true && testRunFinished == false)
-            {
-                PerformTestRun();
-                CalculateTraveledDistance();
-            }
-
+            //if (allowTestRun == true && testRunFinished == false)
+            //{
+            //    PerformTestRun();
+            //    CalculateTraveledDistance();
+            //}
         }
 
         private void SetVehicleColor()
         {
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            Config config = GameObject.FindGameObjectWithTag("MapController").GetComponent<Config>();
+
             switch (vehicleType)
             {
                 case VehicleType.Small:
-                    spriteRenderer.color = Config.GetInstance().GreenVehicleColor;
+                    spriteRenderer.color = config.GreenVehicleColor;
                     break;
                 case VehicleType.Medium:
-                    spriteRenderer.color = Config.GetInstance().BlueVehicleColor;
+                    spriteRenderer.color = config.BlueVehicleColor;
                     break;
                 case VehicleType.Large:
-                    spriteRenderer.color = Config.GetInstance().RedVehicleColor;
+                    spriteRenderer.color = config.RedVehicleColor;
                     break;
 
                 default:
@@ -100,28 +104,40 @@ namespace Assets.Scripts
             }
         }
 
-        public void LoadAllFromOther(GoodsData otherGoodsData, bool takeHowMuchYouCan = true)
+        //public void LoadAllFromOther(GoodsData otherGoodsData, bool takeHowMuchYouCan = true)
+        //{
+        //    // I want to take all goods
+        //    if (!takeHowMuchYouCan)
+        //    {
+        //        // Whoops, too much for me!
+        //        if (GoodsData.GetAllWeight() + otherGoodsData.GetAllWeight() > maxCapacity)
+        //        {
+        //            Debug.LogWarning($"Vehicle cannot take other goods, it's more thant its max capacity." +
+        //                $"current capacity:{GoodsData.GetAllWeight()}, " +
+        //                $"other weights:{otherGoodsData.GetAllWeight()}, " +
+        //                $"max capacity:{maxCapacity}");
+        //            return;
+        //        }
+
+        //        GoodsData.LoadFromOther(otherGoodsData);
+        //    }
+
+        //    // I want to take as much as I have capacity
+        //    if (takeHowMuchYouCan)
+        //    {
+
+        //    }
+        //}
+
+        public void LoadFromOther(Point point)
         {
-            // I want to take all goods
-            if (!takeHowMuchYouCan)
+
+        }
+
+        public void UnloadToOther(Point point)
+        {
+            if (point.PointType == PointType.Market)
             {
-                // Whoops, too much for me!
-                if (GoodsData.GetAllWeight() + otherGoodsData.GetAllWeight() > maxCapacity)
-                {
-                    Debug.LogWarning($"Vehicle cannot take other goods, it's more thant its max capacity." +
-                        $"current capacity:{GoodsData.GetAllWeight()}, " +
-                        $"other weights:{otherGoodsData.GetAllWeight()}, " +
-                        $"max capacity:{maxCapacity}");
-                    return;
-                }
-
-                GoodsData.LoadFromOther(otherGoodsData);
-            }
-
-            // I want to take as much as I have capacity
-            if (takeHowMuchYouCan)
-            {
-
             }
         }
 
@@ -210,6 +226,26 @@ namespace Assets.Scripts
 
             currentPosition = transform.position;
         }
+        void OnDrawGizmosSelected()
+        {
 
+            if (tripPoints == null || tripPoints.Length == 0)
+            {
+                Debug.Log("trip is null or has 0 elements");
+                return;
+            }
+
+            for (int i = 0; i < tripPoints.Length - 1; i++)
+            {
+                SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+                Vector3 current = tripPoints[i].transform.position;
+                Vector3 next = tripPoints[i + 1].transform.position;
+                Handles.DrawBezier(current, next, current, next, spriteRenderer.color, null, 5);
+
+                //Gizmos.color = spriteRenderer.color;
+                //Gizmos.DrawLine(current, next);
+            }
+        }
     }
 }

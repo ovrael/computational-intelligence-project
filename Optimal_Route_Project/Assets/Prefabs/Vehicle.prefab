@@ -93,14 +93,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 863281940382607863}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ac45e80b4aa04444bfea903b6996a97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleType: 1500
   maxCapacity: 1500
+  vehicleSpeed: 10
+  howManyVisits: 4
   pointsToVisit: []
+  startPosition: {x: 0, y: 0}
+  currentPosition: {x: 0, y: 0}
+  totalDistanceTraveled: 0
+  allowTestRun: 0
+  testRunFinished: 0
   MapController: {fileID: 0}
 --- !u!120 &5750614502843991060
 LineRenderer:

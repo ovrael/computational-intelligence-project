@@ -35,10 +35,12 @@ public class Map : MonoBehaviour
 
     [Space(10f)]
 
+    [SerializeField]
+    private Trip trip;
     public List<GameObject> points = new List<GameObject>();
     public List<GameObject> vehicles = new List<GameObject>();
+    public GameObject startWarehouse;
 
-    
 
 
     private Dictionary<string, string> pointsConnections = new Dictionary<string, string>();
@@ -77,7 +79,7 @@ public class Map : MonoBehaviour
                 points[counterNames].name = prefixMarket + counterNames.ToString();
             }
 
-            
+
 
             Debug.Log("Point " + counterNames + " coordinates: " + points[counterNames].transform.position);
 
@@ -169,8 +171,6 @@ public class Map : MonoBehaviour
     private void GizmoActivation()
     {
         SceneView.lastActiveSceneView.drawGizmos = !SceneView.lastActiveSceneView.drawGizmos;
-
-
     }
 
     [ContextMenu("Create vehicles")]
@@ -182,33 +182,52 @@ public class Map : MonoBehaviour
             ClearVehicles();
         }
 
+        if (Config.GetInstance() != null)
+            numberOfVehicles = Random.Range(Config.GetInstance().MinVehicles, Config.GetInstance().MaxVehicles + 1);
+        else
+            numberOfVehicles = Random.Range(3, 7);
+
+
 
         if (numberOfVehicles <= 0 || vehiclePrefab == null)
             return;
 
-        List<Vector3> warehousesLocalizations = points.Where(p => p.GetComponent<Point>().PointType == PointType.Warehouse).Select(p => p.transform.position).ToList();
-        int randomWarehouseIndex = Random.Range(0, warehousesLocalizations.Count);
-
+        List<GameObject> warehouses = points.Where(p => p.GetComponent<Point>().PointType == PointType.Warehouse).ToList();
+        int randomWarehouseIndex = Random.Range(0, warehouses.Count);
+        startWarehouse = warehouses[randomWarehouseIndex];
 
         for (int i = 0; i < numberOfVehicles; i++)
         {
-            Vector3 randomWarehouse = warehousesLocalizations[randomWarehouseIndex] + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), -5);
-            GameObject createdVehicle = Instantiate(vehiclePrefab, randomWarehouse, Quaternion.identity);
-            createdVehicle.name = $"Vehicle_{i} ({createdVehicle.GetComponent<Vehicle>().VehicleType})";
+            Vector3 positionAroundWarehouse = startWarehouse.transform.position + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), -5);
+            GameObject createdVehicle = Instantiate(vehiclePrefab, positionAroundWarehouse, Quaternion.identity);
+            createdVehicle.name = $"Vehicle_{i}";
+            createdVehicle.GetComponent<Vehicle>().enabled = true;
             vehicles.Add(createdVehicle);
         }
+
     }
 
     [ContextMenu("Clear vehicles")]
     private void ClearVehicles()
     {
-
         foreach (GameObject vehicleObject in vehicles)
         {
             DestroyImmediate(vehicleObject);
         }
 
         vehicles.Clear();
+    }
+
+    private void RunTripSolver()
+    {
+        trip = new Trip(this.points, this.vehicles, this.startWarehouse);
+        trip.Run();
+
+        var tripDatas = trip.GetTripDatas();
+        foreach (TripData tripData in tripDatas)
+        {
+            tripData.Vehicle.tripPoints = tripData.TripPoints.ToArray();
+        }
     }
 
     void OnValidate()
@@ -235,6 +254,8 @@ public class Map : MonoBehaviour
     [EditorToolsButtons.Button(name: "Clear vehicles", space: 5f)]
     private void ClearVehiclesButton() => ClearVehicles();
 
+    [EditorToolsButtons.Button(name: "Run Vehicles", space: 5f)]
+    private void RunTripSolverButton() => RunTripSolver();
     #endregion
 }
 

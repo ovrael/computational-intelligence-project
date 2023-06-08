@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets.Scripts
@@ -10,9 +11,45 @@ namespace Assets.Scripts
 
         public GoodsData()
         {
-            MultipleGoods.Add(new Goods(GoodsType.Orange));
-            MultipleGoods.Add(new Goods(GoodsType.Tuna));
-            MultipleGoods.Add(new Goods(GoodsType.Uranium));
+            MultipleGoods = new List<Goods>
+            {
+                new Goods(GoodsType.Orange, 0),
+                new Goods(GoodsType.Tuna, 0),
+                new Goods(GoodsType.Uranium, 0)
+            };
+        }
+
+        public static GoodsData RandomPointGoods(bool haveIt = true)
+        {
+            Random rng = new Random();
+
+            double firstStopPoint = rng.NextDouble();
+            double secondStopPoint = rng.NextDouble() * (1 - firstStopPoint) + firstStopPoint;
+            int goodsSum = rng.Next(100, 201);
+
+            int orangeWeight = (int)(goodsSum * firstStopPoint);
+            int tunaWeight = (int)(goodsSum * (secondStopPoint - firstStopPoint));
+            int uraniumWeight = (int)(goodsSum * (1 - secondStopPoint));
+
+            GoodsData pointGoods = new GoodsData
+            {
+                MultipleGoods = new List<Goods>
+                {
+                    new Goods(GoodsType.Orange, orangeWeight),
+                    new Goods(GoodsType.Tuna, tunaWeight),
+                    new Goods(GoodsType.Uranium, uraniumWeight)
+                }
+            };
+
+            if (haveIt == false)
+            {
+                foreach (var goods in pointGoods.MultipleGoods)
+                {
+                    goods.Weight *= -1;
+                }
+            }
+
+            return pointGoods;
         }
 
 

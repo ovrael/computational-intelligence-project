@@ -25,7 +25,7 @@ namespace Assets.Scripts
         public int Weight
         {
             get { return weight; }
-            private set { weight = value; }
+            set { weight = value; }
         }
 
         public Goods(GoodsType type, bool randomWeight = true)
@@ -35,6 +35,12 @@ namespace Assets.Scripts
 
             if (randomWeight)
                 Weight = Random.Range(Config.GetInstance().MinGoodsWeight, Config.GetInstance().MaxGoodsWeight + 1);
+        }
+
+        public Goods(GoodsType type, int weight)
+        {
+            GoodsType = type;
+            Weight = weight;
         }
 
         public void LoadFromOther(Goods otherGoods)
