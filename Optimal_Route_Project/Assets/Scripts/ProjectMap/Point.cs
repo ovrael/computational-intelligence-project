@@ -7,7 +7,8 @@ using System.Linq;
 public enum PointType
 {
     Market,
-    Warehouse
+    Warehouse,
+    Animal_Shelter
 }
 
 [ExecuteInEditMode]

@@ -10,6 +10,7 @@ using Assets.Scripts;
 [ExecuteInEditMode]
 public class Map : MonoBehaviour
 {
+
     [Header("Map parameters")]
     [SerializeField]
     private int randomSeed = 69420;
@@ -32,19 +33,23 @@ public class Map : MonoBehaviour
     private GameObject warehousePoint;
     [SerializeField]
     private GameObject vehiclePrefab;
+    [SerializeField]
+    private GameObject animalShelterPoint;
+    [SerializeField]
+    [Header("Map additional sprites")]
+    private Sprite CatSprite;
 
     [Space(10f)]
 
     public List<GameObject> points = new List<GameObject>();
     public List<GameObject> vehicles = new List<GameObject>();
 
-    
-
-
     private Dictionary<string, string> pointsConnections = new Dictionary<string, string>();
 
     private const string prefixMarket = "Market_";
     private const string prefixWarehouse = "Warehouse_";
+    private const string prefixAnimalShelter = "AnimalShelter";
+    private const string prefixCatSpot = "_CatSpot";
 
 
     [ContextMenu("Spawn whole map")]
@@ -55,7 +60,7 @@ public class Map : MonoBehaviour
             ClearMap();
         }
 
-
+       
         int counterNames = 0;
 
 
@@ -68,16 +73,17 @@ public class Map : MonoBehaviour
 
             if (points.Count < numberOfWarehouses)
             {
+
                 points.Add(Instantiate(warehousePoint, randomPosition, Quaternion.identity));
                 points[counterNames].name = prefixWarehouse + counterNames.ToString();
             }
             else
-            {
+            {   
+
                 points.Add(Instantiate(marketPoint, randomPosition, Quaternion.identity));
                 points[counterNames].name = prefixMarket + counterNames.ToString();
             }
 
-            
 
             Debug.Log("Point " + counterNames + " coordinates: " + points[counterNames].transform.position);
 
@@ -85,6 +91,13 @@ public class Map : MonoBehaviour
 
 
         } while (points.Count < numberOfPoints);
+
+
+        points.Add(Instantiate(animalShelterPoint, new Vector3(points[0].transform.position.x + Random.Range(-6f, 6f), points[0].transform.position.y + Random.Range(-6f, 6f)), Quaternion.identity));
+        points[counterNames].name = prefixAnimalShelter.ToString();
+
+        Debug.Log("Point " + counterNames + " coordinates: " + points[counterNames].transform.position);
+
 
         Debug.Log("Number of points in list: " + points.Count);
 
@@ -115,7 +128,6 @@ public class Map : MonoBehaviour
     [ContextMenu("Add Points to dictionary")]
     private void AddPointsToDictionary()
     {
-
 
         float minDist = 0f;
         Vector2 currentPointPosition = Vector2.zero;
@@ -169,8 +181,6 @@ public class Map : MonoBehaviour
     private void GizmoActivation()
     {
         SceneView.lastActiveSceneView.drawGizmos = !SceneView.lastActiveSceneView.drawGizmos;
-
-
     }
 
     [ContextMenu("Create vehicles")]
@@ -182,7 +192,6 @@ public class Map : MonoBehaviour
             ClearVehicles();
         }
 
-
         if (numberOfVehicles <= 0 || vehiclePrefab == null)
             return;
 
@@ -190,13 +199,19 @@ public class Map : MonoBehaviour
         int randomWarehouseIndex = Random.Range(0, warehousesLocalizations.Count);
 
 
+
         for (int i = 0; i < numberOfVehicles; i++)
         {
-            Vector3 randomWarehouse = warehousesLocalizations[randomWarehouseIndex] + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), -5);
+            Vector3 randomWarehouse = warehousesLocalizations[randomWarehouseIndex] + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), (Random.Range(-1, -8)));
             GameObject createdVehicle = Instantiate(vehiclePrefab, randomWarehouse, Quaternion.identity);
             createdVehicle.name = $"Vehicle_{i} ({createdVehicle.GetComponent<Vehicle>().VehicleType})";
             vehicles.Add(createdVehicle);
         }
+
+
+        FindSpotForCat();
+
+
     }
 
     [ContextMenu("Clear vehicles")]
@@ -209,6 +224,19 @@ public class Map : MonoBehaviour
         }
 
         vehicles.Clear();
+    }
+
+    [ContextMenu("Find spot for cat")]
+    private void FindSpotForCat()
+    {
+        int randomIndex = Random.Range(0, vehicles.Count);
+        GameObject randomVehicle= vehicles[randomIndex];
+
+        randomVehicle.name += prefixCatSpot;
+
+        SpriteRenderer catSpot = randomVehicle.transform.Find("Cat_Spot").GetComponent<SpriteRenderer>();
+
+        catSpot.sprite = CatSprite;
     }
 
     void OnValidate()
@@ -234,6 +262,7 @@ public class Map : MonoBehaviour
     private void CreateVehiclesButton() => CreateVehicles();
     [EditorToolsButtons.Button(name: "Clear vehicles", space: 5f)]
     private void ClearVehiclesButton() => ClearVehicles();
+
 
     #endregion
 }
