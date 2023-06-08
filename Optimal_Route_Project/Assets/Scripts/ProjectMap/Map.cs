@@ -206,7 +206,7 @@ public class Map : MonoBehaviour
 
             List<GameObject> warehouses = points.Where(p => p.GetComponent<Point>().PointType == PointType.Warehouse).ToList();
             int randomWarehouseIndex = Random.Range(0, warehouses.Count);
-
+            startWarehouse = warehouses[randomWarehouseIndex];
 
             for (int i = 0; i < numberOfVehicles; i++)
             {
