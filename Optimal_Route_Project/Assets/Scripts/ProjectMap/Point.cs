@@ -8,7 +8,8 @@ using Assets.Scripts;
 public enum PointType
 {
     Market,
-    Warehouse
+    Warehouse,
+    Animal_Shelter
 }
 
 [ExecuteInEditMode]

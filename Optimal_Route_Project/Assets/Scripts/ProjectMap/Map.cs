@@ -10,6 +10,7 @@ using Assets.Scripts;
 [ExecuteInEditMode]
 public class Map : MonoBehaviour
 {
+
     [Header("Map parameters")]
     [SerializeField]
     private int randomSeed = 69420;
@@ -32,6 +33,11 @@ public class Map : MonoBehaviour
     private GameObject warehousePoint;
     [SerializeField]
     private GameObject vehiclePrefab;
+    [SerializeField]
+    private GameObject animalShelterPoint;
+    [SerializeField]
+    [Header("Map additional sprites")]
+    private Sprite CatSprite;
 
     [Space(10f)]
 
@@ -47,6 +53,8 @@ public class Map : MonoBehaviour
 
     private const string prefixMarket = "Market_";
     private const string prefixWarehouse = "Warehouse_";
+    private const string prefixAnimalShelter = "AnimalShelter";
+    private const string prefixCatSpot = "_CatSpot";
 
 
     [ContextMenu("Spawn whole map")]
@@ -57,7 +65,7 @@ public class Map : MonoBehaviour
             ClearMap();
         }
 
-
+       
         int counterNames = 0;
 
 
@@ -70,16 +78,18 @@ public class Map : MonoBehaviour
 
             if (points.Count < numberOfWarehouses)
             {
+
                 points.Add(Instantiate(warehousePoint, randomPosition, Quaternion.identity));
                 points[counterNames].name = prefixWarehouse + counterNames.ToString();
             }
             else
             {
+
                 points.Add(Instantiate(marketPoint, randomPosition, Quaternion.identity));
                 points[counterNames].name = prefixMarket + counterNames.ToString();
             }
 
-
+            
 
             Debug.Log("Point " + counterNames + " coordinates: " + points[counterNames].transform.position);
 
@@ -87,6 +97,13 @@ public class Map : MonoBehaviour
 
 
         } while (points.Count < numberOfPoints);
+
+
+        points.Add(Instantiate(animalShelterPoint, new Vector3(points[0].transform.position.x + Random.Range(-6f, 6f), points[0].transform.position.y + Random.Range(-6f, 6f)), Quaternion.identity));
+        points[counterNames].name = prefixAnimalShelter.ToString();
+
+        Debug.Log("Point " + counterNames + " coordinates: " + points[counterNames].transform.position);
+
 
         Debug.Log("Number of points in list: " + points.Count);
 
@@ -117,7 +134,6 @@ public class Map : MonoBehaviour
     [ContextMenu("Add Points to dictionary")]
     private void AddPointsToDictionary()
     {
-
 
         float minDist = 0f;
         Vector2 currentPointPosition = Vector2.zero;
@@ -180,12 +196,12 @@ public class Map : MonoBehaviour
         if (vehicles != null)
         {
             ClearVehicles();
-        }
-
         if (Config.GetInstance() != null)
             numberOfVehicles = Random.Range(Config.GetInstance().MinVehicles, Config.GetInstance().MaxVehicles + 1);
         else
             numberOfVehicles = Random.Range(3, 7);
+
+
 
 
 
@@ -194,17 +210,17 @@ public class Map : MonoBehaviour
 
         List<GameObject> warehouses = points.Where(p => p.GetComponent<Point>().PointType == PointType.Warehouse).ToList();
         int randomWarehouseIndex = Random.Range(0, warehouses.Count);
-        startWarehouse = warehouses[randomWarehouseIndex];
 
-        for (int i = 0; i < numberOfVehicles; i++)
-        {
+
             Vector3 positionAroundWarehouse = startWarehouse.transform.position + new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), -5);
             GameObject createdVehicle = Instantiate(vehiclePrefab, positionAroundWarehouse, Quaternion.identity);
             createdVehicle.name = $"Vehicle_{i}";
             createdVehicle.GetComponent<Vehicle>().enabled = true;
+            GameObject createdVehicle = Instantiate(vehiclePrefab, randomWarehouse, Quaternion.identity);
+            createdVehicle.name = $"Vehicle_{i} ({createdVehicle.GetComponent<Vehicle>().VehicleType})";
+
             vehicles.Add(createdVehicle);
         }
-
     }
 
     [ContextMenu("Clear vehicles")]
@@ -216,8 +232,6 @@ public class Map : MonoBehaviour
         }
 
         vehicles.Clear();
-    }
-
     private void RunTripSolver()
     {
         trip = new Trip(this.points, this.vehicles, this.startWarehouse);
@@ -228,6 +242,21 @@ public class Map : MonoBehaviour
         {
             tripData.Vehicle.tripPoints = tripData.TripPoints.ToArray();
         }
+    }
+
+    [ContextMenu("Find spot for cat")]
+    private void FindSpotForCat()
+    {
+        int randomIndex = Random.Range(0, vehicles.Count);
+        GameObject randomVehicle= vehicles[randomIndex];
+
+        randomVehicle.name += prefixCatSpot;
+
+        SpriteRenderer catSpot = randomVehicle.transform.Find("Cat_Spot").GetComponent<SpriteRenderer>();
+
+        catSpot.sprite = CatSprite;
+    }
+
     }
 
     void OnValidate()
@@ -252,10 +281,10 @@ public class Map : MonoBehaviour
     [EditorToolsButtons.Button(name: "Create Vehicles", space: 5f)]
     private void CreateVehiclesButton() => CreateVehicles();
     [EditorToolsButtons.Button(name: "Clear vehicles", space: 5f)]
-    private void ClearVehiclesButton() => ClearVehicles();
-
     [EditorToolsButtons.Button(name: "Run Vehicles", space: 5f)]
     private void RunTripSolverButton() => RunTripSolver();
+    private void ClearVehiclesButton() => ClearVehicles();
+
     #endregion
 }
 
