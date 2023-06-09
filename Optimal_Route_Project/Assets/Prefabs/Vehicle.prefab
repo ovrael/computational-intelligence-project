@@ -108,18 +108,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vehicleType: 2000
   maxCapacity: 2000
-  vehicleSpeed: 10
+  vehicleSpeed: 20
   loadout: 0
   hasCat: 0
   routeLength: 0
-  howManyVisits: 4
-  pointsToVisit: []
   startPosition: {x: 0, y: 0}
   currentPosition: {x: 0, y: 0}
   totalDistanceTraveled: 0
   displayRouteLength: 1
-  allowTestRun: 0
-  testRunFinished: 0
+  allowVehicleMovement: 0
+  tripFinished: 0
   MapController: {fileID: 0}
   vehicleTextMeshProComponent: {fileID: 8986220540109936771}
   tripPoints: []

@@ -347,6 +347,20 @@ public class Map : MonoBehaviour
 
     }
 
+    private void AllowVehicleMovement()
+    {
+
+        foreach (GameObject vehicle in vehicles)
+        {
+            Vehicle vehicleScript = vehicle.GetComponent<Vehicle>();
+            if (vehicleScript != null)
+            {
+                vehicleScript.allowVehicleMovement = !vehicleScript.allowVehicleMovement;
+            }
+        }
+
+    }
+
     void OnValidate()
     {
         if (Random.seed != randomSeed)
@@ -378,6 +392,8 @@ public class Map : MonoBehaviour
 
     [EditorToolsButtons.Button(name: "Show route length", space: 5f)]
     private void ShowRouteLengthButton() => ShowRouteLength();
+    [EditorToolsButtons.Button(name: "Allow Vehicle Movement", space: 5f)]
+    private void AllowVehicleMovementButton() => AllowVehicleMovement();
 
     #endregion
 }

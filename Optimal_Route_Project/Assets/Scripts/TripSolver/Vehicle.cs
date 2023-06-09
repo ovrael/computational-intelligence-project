@@ -24,7 +24,7 @@ namespace Assets.Scripts
         [SerializeField]
         public int maxCapacity;
         [SerializeField]
-        private float vehicleSpeed = 10.0f;
+        private float vehicleSpeed = 20.0f;
 
         public int loadout = 0;
         public int LeftLoadoutSpace { get { return maxCapacity - loadout; } }
@@ -34,10 +34,6 @@ namespace Assets.Scripts
 
         [Header("Travel info")]
         [SerializeField]
-        private int howManyVisits = 4;
-        [SerializeField]
-        private List<GameObject> pointsToVisit;
-        [SerializeField]
         private Vector2 startPosition;
         [SerializeField]
         private Vector2 currentPosition;
@@ -45,17 +41,17 @@ namespace Assets.Scripts
         private float totalDistanceTraveled = 0f;
         [SerializeField]
         public bool displayRouteLength = false;
-
-        [Header("Test run")]
         [SerializeField]
-        private bool allowTestRun = false;
+        public bool allowVehicleMovement = false;
         [SerializeField]
-        private bool testRunFinished = false;
+        private bool tripFinished = false;
+        public GameObject[] tripPoints;
 
         [Header("Map Controller Reference")]
         [SerializeField]
         private Map MapController;
 
+        [Header("Text Component")]
         [SerializeField]
         private TextMeshPro vehicleTextMeshProComponent;
 
@@ -63,8 +59,6 @@ namespace Assets.Scripts
         private LineRenderer pathLine;
 
         private Color color;
-        public GameObject[] tripPoints;
-
 
         private void Awake()
         {
@@ -87,17 +81,17 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            //if (allowTestRun == true && testRunFinished == false)
-            //{
-            //    PerformTestRun();
-            //    CalculateTraveledDistance();
-            //}
+            if (allowVehicleMovement == true && tripFinished == false)
+            {
+                PerformTripDrive();
+                CalculateTraveledDistance();
+            }
 
 
-            if(displayRouteLength == true)
+            if (displayRouteLength == true)
             {
                 vehicleTextMeshProComponent.enabled = true;
-                vehicleTextMeshProComponent.text = "Total route lenght: " + routeLength + " km";
+                vehicleTextMeshProComponent.text = "Total route lenght: " + totalDistanceTraveled + " km";
                 vehicleTextMeshProComponent.color = Color.black;
                 vehicleTextMeshProComponent.fontSize = 12;
                 vehicleTextMeshProComponent.alignment = TextAlignmentOptions.Center;
@@ -172,78 +166,23 @@ namespace Assets.Scripts
             }
         }
 
-        [ContextMenu("Add random points to list")]
-        private void PickRandomPoints()
+
+        private void PerformTripDrive()
         {
 
-            if (pointsToVisit != null)
-            {
-                pointsToVisit.Clear();
-            }
+            transform.position = Vector2.MoveTowards(transform.position, tripPoints[nextPointIndex].transform.position, vehicleSpeed * Time.deltaTime);
 
-            pointsToVisit.Add(this.gameObject);
-
-            for (int i = 0; i < howManyVisits; i++)
-            {
-                int randomIndex = UnityEngine.Random.Range(0, MapController.points.Count);
-
-                if (!pointsToVisit.Contains(MapController.points[randomIndex]))
-                {
-                    pointsToVisit.Add(MapController.points[randomIndex]);
-                }
-            }
-
-            VisualizePath();
-
-        }
-
-
-        private void VisualizePath()
-        {
-            Vector3[] pointsPositions = new Vector3[pointsToVisit.Count];
-
-            pointsPositions[0] = transform.position;
-
-            for (int i = 1; i < pointsPositions.Length; i++)
-            {
-                pointsPositions[i] = pointsToVisit[i].transform.position;
-            }
-
-            pathLine.positionCount = pointsPositions.Length;
-            pathLine.SetPositions(pointsPositions);
-
-        }
-
-        [ContextMenu("Reset vehicle")]
-        private void ResetVehicle()
-        {
-            transform.position = startPosition;
-            allowTestRun = false;
-            testRunFinished = false;
-
-            currentPosition = transform.position;
-            totalDistanceTraveled = 0;
-
-            pointsToVisit.Clear();
-            pathLine.positionCount = 0;
-        }
-
-        private void PerformTestRun()
-        {
-
-            transform.position = Vector2.MoveTowards(transform.position, pointsToVisit[nextPointIndex].transform.position, vehicleSpeed * Time.deltaTime);
-
-            if (Vector2.Distance(transform.position, pointsToVisit[nextPointIndex].transform.position) < 0.1f)
+            if (Vector2.Distance(transform.position, tripPoints[nextPointIndex].transform.position) < 0.1f)
             {
 
-                if (nextPointIndex < pointsToVisit.Count - 1)
+                if (nextPointIndex < tripPoints.Length - 1)
                 {
                     nextPointIndex = nextPointIndex + 1;
                 }
                 else
                 {
                     nextPointIndex = 0;
-                    testRunFinished = true;
+                    tripFinished = true;
                 }
 
             }
