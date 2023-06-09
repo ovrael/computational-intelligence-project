@@ -5,12 +5,16 @@ using UnityEditor;
 using System.Linq;
 using static UnityEngine.Rendering.DebugUI;
 using Assets.Scripts;
+using TMPro;
 
 
 [ExecuteInEditMode]
 public class Map : MonoBehaviour
 {
     public float allTripLength = 0;
+
+    [SerializeField]
+    private TextMeshPro textMeshProComponent;
 
     [Header("Map parameters")]
     [SerializeField]
@@ -57,10 +61,32 @@ public class Map : MonoBehaviour
     private const string prefixAnimalShelter = "AnimalShelter";
     private const string prefixCatSpot = "_CatSpot";
 
+    private const string totalDistanceTraveledText = "Total distance traveled by all vehicles - ";
+
+    private void Awake()
+    {
+        textMeshProComponent = GetComponent<TextMeshPro>();
+
+    }
+
+    private void Update()
+    {
+        
+        textMeshProComponent.text = totalDistanceTraveledText + allTripLength.ToString() + " km";
+        textMeshProComponent.color = Color.white;
+        textMeshProComponent.fontSize = 36;
+        textMeshProComponent.alignment = TextAlignmentOptions.Center;
+        textMeshProComponent.text = textMeshProComponent.text.ToUpper();
+        textMeshProComponent.fontStyle = FontStyles.Bold;
+    }
+
 
     [ContextMenu("Spawn whole map")]
     private void CreateMap()
     {
+
+        allTripLength = 0;
+
         if (points != null)
         {
             ClearMap();
@@ -101,7 +127,7 @@ public class Map : MonoBehaviour
         points.Add(Instantiate(animalShelterPoint, new Vector3(points[0].transform.position.x + Random.Range(-6f, 6f), points[0].transform.position.y + Random.Range(-6f, 6f)), Quaternion.identity));
         points[counterNames].name = prefixAnimalShelter.ToString();
 
-        Debug.Log("Point " + counterNames + " coordinates: " + points[counterNames].transform.position);
+        Debug.Log("Animal Shelter " + counterNames + " coordinates: " + points[counterNames].transform.position);
 
 
         Debug.Log("Number of points in list: " + points.Count);
@@ -113,6 +139,8 @@ public class Map : MonoBehaviour
     [ContextMenu("Clear map")]
     private void ClearMap()
     {
+
+        allTripLength = 0;
 
         foreach (GameObject go in points)
         {
@@ -266,7 +294,7 @@ public class Map : MonoBehaviour
         }
     }
 
-    [ContextMenu("Find spot for cat")]
+    
     private void FindSpotForCat()
     {
         int randomIndex = Random.Range(0, vehicles.Count);

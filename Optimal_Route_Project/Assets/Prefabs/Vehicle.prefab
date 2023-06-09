@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 372bc8850e29f9547b3b25c352960851, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -102,6 +102,9 @@ MonoBehaviour:
   vehicleType: 1000
   maxCapacity: 1000
   vehicleSpeed: 10
+  loadout: 0
+  hasCat: 0
+  routeLength: 0
   howManyVisits: 4
   pointsToVisit: []
   startPosition: {x: 0, y: 0}
@@ -110,6 +113,7 @@ MonoBehaviour:
   allowTestRun: 0
   testRunFinished: 0
   MapController: {fileID: 0}
+  tripPoints: []
 --- !u!120 &5750614502843991060
 LineRenderer:
   serializedVersion: 2

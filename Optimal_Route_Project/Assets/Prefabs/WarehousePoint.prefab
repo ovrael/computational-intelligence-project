@@ -49,6 +49,8 @@ MonoBehaviour:
   maxNumberOfConnections: 3
   currentPointPosition: {x: 0, y: 0}
   MapController: {fileID: 0}
+  goods: 0
+  skip: 0
 --- !u!212 &-7218546521872296825
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -89,7 +91,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 070fd4d0700b15e4399be2c0736adcc0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
