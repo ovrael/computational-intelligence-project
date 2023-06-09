@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using TMPro;
 
 namespace Assets.Scripts
 {
@@ -42,6 +43,8 @@ namespace Assets.Scripts
         private Vector2 currentPosition;
         [SerializeField]
         private float totalDistanceTraveled = 0f;
+        [SerializeField]
+        public bool displayRouteLength = false;
 
         [Header("Test run")]
         [SerializeField]
@@ -52,6 +55,9 @@ namespace Assets.Scripts
         [Header("Map Controller Reference")]
         [SerializeField]
         private Map MapController;
+
+        [SerializeField]
+        private TextMeshPro vehicleTextMeshProComponent;
 
         private int nextPointIndex;
         private LineRenderer pathLine;
@@ -74,6 +80,8 @@ namespace Assets.Scripts
 
             loadoutGoods = new GoodsData();
 
+            vehicleTextMeshProComponent = transform.Find("Text_Component").GetComponent<TextMeshPro>();
+
             SetVehicleColor();
         }
 
@@ -84,6 +92,24 @@ namespace Assets.Scripts
             //    PerformTestRun();
             //    CalculateTraveledDistance();
             //}
+
+
+            if(displayRouteLength == true)
+            {
+                vehicleTextMeshProComponent.enabled = true;
+                vehicleTextMeshProComponent.text = "Total route lenght: " + routeLength + " km";
+                vehicleTextMeshProComponent.color = Color.black;
+                vehicleTextMeshProComponent.fontSize = 10;
+                vehicleTextMeshProComponent.alignment = TextAlignmentOptions.Center;
+                vehicleTextMeshProComponent.text = vehicleTextMeshProComponent.text.ToUpper();
+                vehicleTextMeshProComponent.fontStyle = FontStyles.Bold;
+
+            }
+            else
+            {
+                vehicleTextMeshProComponent.enabled = false;
+            }
+
         }
 
         private void SetVehicleColor()

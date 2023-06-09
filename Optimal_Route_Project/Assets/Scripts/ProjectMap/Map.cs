@@ -333,6 +333,20 @@ public class Map : MonoBehaviour
         }
     }
 
+    private void ShowRouteLength()
+    {
+
+        foreach (GameObject vehicle in vehicles)
+        {
+            Vehicle vehicleScript = vehicle.GetComponent<Vehicle>();
+            if (vehicleScript != null)
+            {
+                vehicleScript.displayRouteLength = !vehicleScript.displayRouteLength;
+            }
+        }
+
+    }
+
     void OnValidate()
     {
         if (Random.seed != randomSeed)
@@ -362,6 +376,8 @@ public class Map : MonoBehaviour
     [EditorToolsButtons.Button(name: "Clear vehicles", space: 5f)]
     private void ClearVehiclesButton() => ClearVehicles();
 
+    [EditorToolsButtons.Button(name: "Show route length", space: 5f)]
+    private void ShowRouteLengthButton() => ShowRouteLength();
 
     #endregion
 }
