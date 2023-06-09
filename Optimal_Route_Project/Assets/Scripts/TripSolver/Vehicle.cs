@@ -27,6 +27,9 @@ namespace Assets.Scripts
 
         public int loadout = 0;
         public int LeftLoadoutSpace { get { return maxCapacity - loadout; } }
+        public GoodsData loadoutGoods;
+        public bool hasCat = false;
+        public float routeLength = 0;
 
         [Header("Travel info")]
         [SerializeField]
@@ -68,6 +71,8 @@ namespace Assets.Scripts
 
             startPosition = transform.position;
             currentPosition = transform.position;
+
+            loadoutGoods = new GoodsData();
 
             SetVehicleColor();
         }
@@ -245,6 +250,15 @@ namespace Assets.Scripts
 
                 //Gizmos.color = spriteRenderer.color;
                 //Gizmos.DrawLine(current, next);
+            }
+        }
+
+        internal void ComputeRouteLenght()
+        {
+            routeLength = 0;
+            for (int i = 0; i < tripPoints.Length - 1; i++)
+            {
+                routeLength += Vector3.Distance(tripPoints[i].transform.position, tripPoints[i + 1].transform.position);
             }
         }
     }

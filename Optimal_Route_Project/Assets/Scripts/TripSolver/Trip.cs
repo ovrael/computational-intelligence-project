@@ -54,9 +54,133 @@ namespace Assets.Scripts
             this.startWarehouse = startWarehouse;
         }
 
+        private void GoTripGoods(TripData tripData, GoodsType goodsType)
+        {
+            GameObject[] searchMarkets = GetMarketsInLimitationArea(tripData);
+
+            int whileCounter = 0;
+            int whileMax = 200;
+
+            if (searchMarkets.Length == 0)
+            {
+                Debug.Log("No search markets in area, vehicle has no route");
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var sm in searchMarkets)
+            {
+                sb.Append($"{sm.name}, ");
+            }
+            Debug.Log("THERE ARE " + searchMarkets.Length + " markets in the area, named: " + sb.ToString());
+
+            while (searchMarkets.Any(p => p.GetComponent<Point>().goodsData.multipleGoods[goodsType] != 0))
+            {
+                if (whileCounter > whileMax) break;
+                Debug.Log($"While... trip length: {tripData.TripPoints.Count} Counter:{whileCounter}");
+                whileCounter++;
+
+                int zerosCounter = 0;
+                for (int i = 0; i < searchMarkets.Length; i++)
+                    if (searchMarkets[i].GetComponent<Point>().goodsData.multipleGoods[goodsType] == 0) zerosCounter++;
+
+                if (zerosCounter == searchMarkets.Length)
+                {
+                    Debug.Log("All markets have 0 goods");
+                    break;
+                }
+
+                Debug.Log("Check available markets");
+                // There are no available markets -> go to warehouse to reset loadout
+                if (SkipMarketsCount(searchMarkets) == searchMarkets.Length)
+                {
+                    Debug.Log("There are no available markets -> go to warehouse to reset loadout");
+                    int leftMarketsGoods = searchMarkets.Sum(p => p.GetComponent<Point>().goodsData.multipleGoods[goodsType]);
+                    GoToWarehouseGoods(tripData, leftMarketsGoods, goodsType);
+
+                    // Clear skip status
+                    foreach (var m in searchMarkets)
+                    {
+                        m.GetComponent<Point>().skip = false;
+                    }
+                }
+
+                Debug.Log("Find nearest market");
+                var undoneMarket = tripData.TripPoints.Last().FindNearestUndoneMarketGoods(searchMarkets, goodsType);
+                if (undoneMarket == null)
+                {
+                    Debug.Log("undoneMarket is null");
+
+                    break;
+                }
+
+                Point market = undoneMarket.GetComponent<Point>();
+                Debug.Log("Nearest market is: " + undoneMarket.name + " with " + market.goods + " goods.");
+
+                if (tripData.Vehicle.hasCat && goodsType == GoodsType.Tuna)
+                {
+                    int dist = (int)Vector3.Distance(tripData.TripPoints.Last().transform.position, undoneMarket.transform.position);
+                    int currentTuna = tripData.Vehicle.loadoutGoods.multipleGoods[GoodsType.Tuna];
+                    tripData.Vehicle.loadoutGoods.multipleGoods[GoodsType.Tuna] = currentTuna - dist >= 0 ? currentTuna - dist : 0;
+                }
+
+                bool visitResult = false;
+                if (market.goodsData.multipleGoods[goodsType] < 0) // Market wants goods
+                {
+                    Debug.Log("Unload vehicle");
+                    visitResult = tripData.Vehicle.UnloadGoods(market, goodsType);
+                }
+                else // Market has goods
+                {
+                    Debug.Log("Load vehicle");
+                    visitResult = tripData.Vehicle.LoadGoods(market, goodsType);
+                }
+
+
+                Debug.Log("Check visit result: " + visitResult);
+                // Something went wrong...
+                if (!visitResult)
+                {
+                    Debug.Log("Skip market");
+                    market.skip = true;
+                }
+                else // It's fine, car changed loadout so skipped markets are will be longer skipped
+                {
+                    Debug.Log("Car changed loadout, reset skips");
+                    tripData.TripPoints.Add(undoneMarket);
+                    foreach (var m in searchMarkets)
+                    {
+                        m.GetComponent<Point>().skip = false;
+                    }
+                }
+            }
+
+            if (tripData.TripPoints.Last().name != startWarehouse.name)
+            {
+                tripData.TripPoints.Add(startWarehouse);
+                tripData.Vehicle.loadoutGoods.multipleGoods[goodsType] = 0;
+            }
+
+            if (tripData.TripPoints.Count > 2 && tripData.TripPoints[1].name == startWarehouse.name)
+                tripData.TripPoints.RemoveAt(0);
+
+            // Found best trip
+            Debug.Log("End of trip");
+        }
+
+        private int SkipMarketsCount(GameObject[] markets)
+        {
+            int skipCounter = 0;
+            foreach (var m in markets)
+            {
+                if (m.GetComponent<Point>().skip) skipCounter++;
+            }
+            return skipCounter;
+        }
+
         private void GoTrip(TripData tripData)
         {
-            GameObject[] searchMarkets = GetAvailableMarkets(tripData);
+            GameObject[] searchMarkets = GetMarketsInLimitationArea(tripData);
 
             int whileCounter = 0;
             int whileMax = 200;
@@ -161,9 +285,32 @@ namespace Assets.Scripts
             Debug.Log("End of trip");
         }
 
+
+        private void GoToWarehouseGoods(TripData tripData, int leftMarketsGoods, GoodsType goodsType)
+        {
+            bool alreadyInWarehouse = tripData.TripPoints.Last().GetComponent<Point>().PointType == PointType.Warehouse;
+            GameObject nearestWarehouse = alreadyInWarehouse ? tripData.TripPoints.Last() : tripData.TripPoints.Last().FindNearestWarehouse(warehouses);
+
+            Debug.Log("Left goods: " + leftMarketsGoods);
+            // There are more goods than needed - unload all vehicle
+            if (leftMarketsGoods >= 0)
+            {
+                Debug.Log("Vehicles loadout is 0");
+                tripData.Vehicle.loadoutGoods.multipleGoods[goodsType] = 0;
+            }
+            else // There are more needed markets
+            {
+                Debug.Log("Vehicles has maximum load");
+                tripData.Vehicle.loadoutGoods.multipleGoods[goodsType] = tripData.Vehicle.maxCapacity;
+            }
+
+            if (!alreadyInWarehouse)
+                tripData.TripPoints.Add(nearestWarehouse);
+        }
+
         private void GoToWarehouse(TripData tripData, int leftMarketsGoods)
         {
-            bool alreadyInWarehouse = tripData.TripPoints.Last().GetComponent<Point>().PointType == PointType.Market;
+            bool alreadyInWarehouse = tripData.TripPoints.Last().GetComponent<Point>().PointType == PointType.Warehouse;
             GameObject nearestWarehouse = alreadyInWarehouse ? tripData.TripPoints.Last() : tripData.TripPoints.Last().FindNearestWarehouse(warehouses);
 
             Debug.Log("Left goods: " + leftMarketsGoods);
@@ -183,13 +330,13 @@ namespace Assets.Scripts
                 tripData.TripPoints.Add(nearestWarehouse);
         }
 
-        private GameObject[] GetAvailableMarkets(TripData tripData)
+        private GameObject[] GetMarketsInLimitationArea(TripData tripData)
         {
             List<GameObject> availablePoints = new List<GameObject>();
 
             foreach (var point in points)
             {
-                if (point.GetComponent<Point>().PointType == PointType.Warehouse)
+                if (point.GetComponent<Point>().PointType != PointType.Market)
                     continue;
 
                 if (tripData.AreaLimitations.Contains(point.transform.position))
@@ -201,7 +348,7 @@ namespace Assets.Scripts
             return availablePoints.ToArray();
         }
 
-        public void Run()
+        public void Run(bool runWithGoodsData)
         {
             tripDatas = new TripData[vehicles.Length];
             limitations = ComputeLimitations(vehicles.Length);
@@ -213,7 +360,8 @@ namespace Assets.Scripts
                     Vehicle = vehicles[i],
                     TripPoints = new List<GameObject>()
                     {
-                        startWarehouse
+                        startWarehouse,
+                        GameObject.Find("AnimalShelter")
                     },
                     AreaLimitations = limitations[i]
                 };
@@ -221,11 +369,33 @@ namespace Assets.Scripts
                 //tripDatas[i].ShowDebug();
             }
 
-            for (int i = 0; i < tripDatas.Length; i++)
+            if (runWithGoodsData)
             {
-                Debug.Log($"-------------------------------------------------------------------------------------------- Car {i} goes on trip!");
-                GoTrip(tripDatas[i]);
-                Debug.Log($"Car {i} ended trip!");
+                for (int i = 0; i < tripDatas.Length; i++)
+                {
+                    Debug.Log($"-------------------------------------------------------------------------------------------- Car {i} goes on trip  with GoodsData!");
+                    GoTripGoods(tripDatas[i], GoodsType.Orange);
+                    GoTripGoods(tripDatas[i], GoodsType.Uranium);
+                    GoTripGoods(tripDatas[i], GoodsType.Tuna);
+
+                    //if (tripDatas[i].TripPoints.Last().name != startWarehouse.name)
+                    //{
+                    //    tripDatas[i].TripPoints.Add(startWarehouse);
+                    //}
+
+                    if (tripDatas[i].TripPoints.Count == 2 && tripDatas[i].TripPoints[1].name != startWarehouse.name)
+                        tripDatas[i].TripPoints.Add(startWarehouse);
+                    Debug.Log($"Car {i} ended trip!");
+                }
+            }
+            else
+            {
+                for (int i = 0; i < tripDatas.Length; i++)
+                {
+                    Debug.Log($"-------------------------------------------------------------------------------------------- Car {i} goes on trip");
+                    GoTrip(tripDatas[i]);
+                    Debug.Log($"Car {i} ended trip!");
+                }
             }
         }
 
@@ -295,6 +465,32 @@ namespace Assets.Scripts
             foreach (var market in undoneMarkets)
             {
                 if (market.GetComponent<Point>().goods == 0 || market == point)
+                    continue;
+
+                float dist = Vector3.Distance(market.transform.position, point.transform.position);
+                if (dist < minDistance)
+                {
+                    nearestMarket = market;
+                    minDistance = dist;
+                }
+            }
+
+            return nearestMarket;
+        }
+
+        public static GameObject FindNearestUndoneMarketGoods(this GameObject point, GameObject[] markets, GoodsType goodsType)
+        {
+            GameObject[] undoneMarkets = markets.Where(m => m.GetComponent<Point>().goodsData.multipleGoods[goodsType] != 0 && m.GetComponent<Point>().skip == false).ToArray();
+
+            if (undoneMarkets.Length == 0)
+                return null;
+
+            GameObject nearestMarket = undoneMarkets[0];
+            float minDistance = float.MaxValue;
+
+            foreach (var market in undoneMarkets)
+            {
+                if (market.GetComponent<Point>().goodsData.multipleGoods[goodsType] == 0 || market == point)
                     continue;
 
                 float dist = Vector3.Distance(market.transform.position, point.transform.position);
@@ -384,6 +580,44 @@ namespace Assets.Scripts
             // Vehicle take as many goods as it can
             point.goods += vehicle.loadout;
             vehicle.loadout = 0;
+            return true;
+        }
+
+        public static bool LoadGoods(this Vehicle vehicle, Point point, GoodsType goodsType)
+        {
+            int leftSpace = vehicle.maxCapacity - vehicle.loadoutGoods.multipleGoods[goodsType];
+
+            if (leftSpace <= 0) return false;
+
+            // Vehicle can take all goods
+            if (leftSpace > point.goodsData.multipleGoods[goodsType])
+            {
+                vehicle.loadoutGoods.multipleGoods[goodsType] += point.goodsData.multipleGoods[goodsType];
+                point.goodsData.multipleGoods[goodsType] = 0;
+                return true;
+            }
+
+            // Vehicle take as many goods as it can
+            point.goodsData.multipleGoods[goodsType] -= leftSpace;
+            vehicle.loadoutGoods.multipleGoods[goodsType] = vehicle.maxCapacity;
+            return true;
+        }
+
+        public static bool UnloadGoods(this Vehicle vehicle, Point point, GoodsType goodsType)
+        {
+            if (vehicle.loadoutGoods.multipleGoods[goodsType] <= 0) return false;
+
+            // Vehicle can give all goods
+            if (vehicle.loadoutGoods.multipleGoods[goodsType] + point.goodsData.multipleGoods[goodsType] >= 0)
+            {
+                vehicle.loadoutGoods.multipleGoods[goodsType] += point.goodsData.multipleGoods[goodsType];
+                point.goodsData.multipleGoods[goodsType] = 0;
+                return true;
+            }
+
+            // Vehicle take as many goods as it can
+            point.goodsData.multipleGoods[goodsType] += vehicle.loadoutGoods.multipleGoods[goodsType];
+            vehicle.loadoutGoods.multipleGoods[goodsType] = 0;
             return true;
         }
     }

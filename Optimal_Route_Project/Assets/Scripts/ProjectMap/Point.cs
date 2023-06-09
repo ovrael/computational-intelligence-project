@@ -34,6 +34,9 @@ public class Point : MonoBehaviour
     public int goods;
     public bool skip;
 
+    public GoodsData goodsData;
+    public bool IsDone { get { return goodsData.GetAllWeight() == 0; } }
+
     private void Awake()
     {
         MapController = GameObject.FindGameObjectWithTag("MapController").GetComponent<Map>();
@@ -41,6 +44,8 @@ public class Point : MonoBehaviour
         int wantsOrHave = Random.Range(0, 100);
         goods = Random.Range(100, 201);
         goods *= wantsOrHave < 50 ? -1 : 1;
+
+        goodsData = GoodsData.RandomPointGoods();
     }
 
     private void Update()

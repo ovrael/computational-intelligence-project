@@ -6,16 +6,15 @@ namespace Assets.Scripts
 {
     public class GoodsData
     {
-        private List<Goods> multipleGoods;
-        public List<Goods> MultipleGoods { get => multipleGoods; set => multipleGoods = value; }
+        public Dictionary<GoodsType, int> multipleGoods;
 
         public GoodsData()
         {
-            MultipleGoods = new List<Goods>
+            multipleGoods = new Dictionary<GoodsType, int>
             {
-                new Goods(GoodsType.Orange, 0),
-                new Goods(GoodsType.Tuna, 0),
-                new Goods(GoodsType.Uranium, 0)
+                {GoodsType.Orange, 0 },
+                {GoodsType.Tuna, 0 },
+                {GoodsType.Uranium, 0 },
             };
         }
 
@@ -33,19 +32,19 @@ namespace Assets.Scripts
 
             GoodsData pointGoods = new GoodsData
             {
-                MultipleGoods = new List<Goods>
+                multipleGoods = new Dictionary<GoodsType, int>
                 {
-                    new Goods(GoodsType.Orange, orangeWeight),
-                    new Goods(GoodsType.Tuna, tunaWeight),
-                    new Goods(GoodsType.Uranium, uraniumWeight)
+                    { GoodsType.Orange, orangeWeight },
+                    { GoodsType.Tuna, tunaWeight },
+                    { GoodsType.Uranium, uraniumWeight }
                 }
             };
 
             if (haveIt == false)
             {
-                foreach (var goods in pointGoods.MultipleGoods)
+                foreach (var goods in pointGoods.multipleGoods)
                 {
-                    goods.Weight *= -1;
+                    pointGoods.multipleGoods[goods.Key] *= -1;
                 }
             }
 
@@ -55,24 +54,7 @@ namespace Assets.Scripts
 
         public int GetAllWeight()
         {
-            return MultipleGoods.Select(x => x.Weight).Sum();
-        }
-
-        /// <summary>
-        /// Takes goods FROM other and puts them into THIS object.
-        /// </summary>
-        /// <param name="otherGoodsData">Other goods data from whom we are taking goods</param>
-        /// <param name="weights">
-        /// How much we are taking them.
-        /// If not specified or too short then we take max.
-        /// </param>
-        public void LoadFromOther(GoodsData otherGoodsData, params int[] weights)
-        {
-            for (int i = 0; i < MultipleGoods.Count; i++)
-            {
-                int weightToLoad = (i < weights.Length) ? weights[i] : otherGoodsData.MultipleGoods[i].Weight;
-                MultipleGoods[i].LoadFromOther(otherGoodsData.MultipleGoods[i], weightToLoad);
-            }
+            return multipleGoods.Select(x => x.Value).Sum();
         }
     }
 }
