@@ -99,7 +99,7 @@ namespace Assets.Scripts
                 vehicleTextMeshProComponent.enabled = true;
                 vehicleTextMeshProComponent.text = "Total route lenght: " + routeLength + " km";
                 vehicleTextMeshProComponent.color = Color.black;
-                vehicleTextMeshProComponent.fontSize = 10;
+                vehicleTextMeshProComponent.fontSize = 12;
                 vehicleTextMeshProComponent.alignment = TextAlignmentOptions.Center;
                 vehicleTextMeshProComponent.text = vehicleTextMeshProComponent.text.ToUpper();
                 vehicleTextMeshProComponent.fontStyle = FontStyles.Bold;
