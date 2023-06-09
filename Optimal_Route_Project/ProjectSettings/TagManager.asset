@@ -9,6 +9,7 @@ TagManager:
   - MarketPoint
   - WarehousePoint
   - Vehicle
+  - Areas
   layers:
   - Default
   - TransparentFX

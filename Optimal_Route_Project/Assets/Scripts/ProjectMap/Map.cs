@@ -41,8 +41,11 @@ public class Map : MonoBehaviour
     [SerializeField]
     public GameObject animalShelterPoint;
     [SerializeField]
+    private GameObject areasParent;
+    [SerializeField]
     [Header("Map additional sprites")]
     private Sprite CatSprite;
+
 
     [Space(10f)]
 
@@ -66,6 +69,7 @@ public class Map : MonoBehaviour
     private void Awake()
     {
         textMeshProComponent = GetComponent<TextMeshPro>();
+        areasParent = GameObject.FindGameObjectWithTag("Areas");
 
     }
 
@@ -84,6 +88,7 @@ public class Map : MonoBehaviour
     [ContextMenu("Spawn whole map")]
     private void CreateMap()
     {
+        ClearAreas();
 
         allTripLength = 0;
 
@@ -156,6 +161,8 @@ public class Map : MonoBehaviour
         pointsConnections.Clear();
 
         vehicles.Clear();
+
+        ClearAreas();
     }
 
     [ContextMenu("Add Points to dictionary")]
@@ -257,6 +264,8 @@ public class Map : MonoBehaviour
             DestroyImmediate(vehicleObject);
         }
         vehicles.Clear();
+
+        ClearAreas();
     }
     private void RunTripSolver(bool runWithGoodsData = false)
     {
@@ -273,11 +282,7 @@ public class Map : MonoBehaviour
         }
         Debug.Log($"All route length equals {allTripLength}");
 
-        GameObject areasParent = GameObject.Find("Areas");
-        foreach (Transform child in areasParent.transform)
-        {
-            Destroy(child.gameObject);
-        }
+        ClearAreas();
 
         int counter = 0;
         foreach (var limitation in trip.limitations)
@@ -292,6 +297,8 @@ public class Map : MonoBehaviour
 
             rect.transform.SetParent(areasParent.transform);
         }
+
+        
     }
 
     
@@ -305,6 +312,25 @@ public class Map : MonoBehaviour
         SpriteRenderer catSpot = randomVehicle.transform.Find("Cat_Spot").GetComponent<SpriteRenderer>();
 
         catSpot.sprite = CatSprite;
+    }
+
+    [ContextMenu("Clear Areas")]
+    private void ClearAreas()
+    {
+        List<GameObject> objectsToDestroy = new List<GameObject>();
+
+        foreach (Transform child in areasParent.transform)
+        {
+            if (child.gameObject.activeSelf)
+            {
+                objectsToDestroy.Add(child.gameObject);
+            }
+        }
+
+        foreach (GameObject obj in objectsToDestroy)
+        {
+            DestroyImmediate(obj);
+        }
     }
 
     void OnValidate()
@@ -335,6 +361,7 @@ public class Map : MonoBehaviour
 
     [EditorToolsButtons.Button(name: "Clear vehicles", space: 5f)]
     private void ClearVehiclesButton() => ClearVehicles();
+
 
     #endregion
 }
