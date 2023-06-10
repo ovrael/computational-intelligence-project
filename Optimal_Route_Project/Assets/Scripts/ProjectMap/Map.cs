@@ -51,6 +51,7 @@ public class Map : MonoBehaviour
 
     [SerializeField]
     private Trip trip;
+    [Header("Lists of objects")]
     public List<GameObject> points = new List<GameObject>();
     public List<GameObject> vehicles = new List<GameObject>();
     public GameObject startWarehouse;
@@ -347,6 +348,7 @@ public class Map : MonoBehaviour
 
     }
 
+    [ContextMenu("Allow Vehicle Movement")]
     private void AllowVehicleMovement()
     {
 
@@ -369,14 +371,10 @@ public class Map : MonoBehaviour
 
     #region  Map Buttons
 
-    [EditorToolsButtons.Button(name: "Spawn Whole Map", space: 5f)]
+    [EditorToolsButtons.Button(name: "Spawn Whole Map", space: 15f)]
     private void SpawnWholeMapButton() => CreateMap();
     [EditorToolsButtons.Button(name: "Clear Map", space: 5f)]
     private void ClearMapButton() => ClearMap();
-    [EditorToolsButtons.Button(name: "Add Points to Dictionary", space: 5f)]
-    private void AddPointsToDictionaryButton() => AddPointsToDictionary();
-    [EditorToolsButtons.Button(name: "Print Dictionary", space: 5f)]
-    private void PrintDictionaryButton() => PrintDictionary();
     [EditorToolsButtons.Button(name: "Gizmo On/Off", space: 5f)]
     private void GizmoActivationButton() => GizmoActivation();
     [EditorToolsButtons.Button(name: "Create Vehicles", space: 5f)]
@@ -394,6 +392,11 @@ public class Map : MonoBehaviour
     private void ShowRouteLengthButton() => ShowRouteLength();
     [EditorToolsButtons.Button(name: "Allow Vehicle Movement", space: 5f)]
     private void AllowVehicleMovementButton() => AllowVehicleMovement();
+
+    //[EditorToolsButtons.Button(name: "Add Points to Dictionary", space: 5f)]
+    //private void AddPointsToDictionaryButton() => AddPointsToDictionary();
+    //[EditorToolsButtons.Button(name: "Print Dictionary", space: 5f)]
+    //private void PrintDictionaryButton() => PrintDictionary();
 
     #endregion
 }
